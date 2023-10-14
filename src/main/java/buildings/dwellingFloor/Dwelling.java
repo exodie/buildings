@@ -165,11 +165,13 @@ public class Dwelling {
         for (DwellingFloor floor : floors) {
             Flat[] floorFlat = floor.getFlats();
 
+            // временное решение - переделаю
             System.arraycopy(floorFlat, 0, flats, currIdx, floorFlat.length);
 
             currIdx += floorFlat.length;
         }
 
+        // временное решение - переделаю
         Arrays.sort(flats, (flat1, flat2) -> {
             if (currentOrder == 1) {
                 return Double.compare(flat1.getSquare(), flat2.getSquare());
