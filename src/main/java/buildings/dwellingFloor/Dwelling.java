@@ -2,8 +2,6 @@ package buildings.dwellingFloor;
 
 import buildings.flat.Flat;
 
-import java.util.Arrays;
-
 public class Dwelling {
     private final DwellingFloor[] floors;
 
@@ -89,8 +87,6 @@ public class Dwelling {
 
     /**
      * FIXME: Duplicate code with addFlat fc
-     * @param idx
-     * @param newFlat
      */
     public void setFlat(int idx, Flat newFlat) {
         int currIdx = idx;
@@ -157,32 +153,32 @@ public class Dwelling {
     }
 
     public Flat[] getSortFlatsBySquare(int currentOrder) {
-        int totalFlatsQuantity = getFlatsQuantity();
-        int currIdx = 0;
+        int totalFlats = getFlatsQuantity();
+        Flat[] flats = new Flat[totalFlats];
+        int flatsLen = flats.length;
 
-        Flat[] flats = new Flat[totalFlatsQuantity];
-
+        int currentIndex = 0;
         for (DwellingFloor floor : floors) {
-            Flat[] floorFlat = floor.getFlats();
-
-            // временное решение - переделаю
-            System.arraycopy(floorFlat, 0, flats, currIdx, floorFlat.length);
-
-            currIdx += floorFlat.length;
+            Flat[] floorFlats = floor.getFlats();
+            System.arraycopy(floorFlats, 0, flats, currentIndex, floorFlats.length);
+            currentIndex += floorFlats.length;
         }
 
-        // временное решение - переделаю
-        Arrays.sort(flats, (flat1, flat2) -> {
-            if (currentOrder == 1) {
-                return Double.compare(flat1.getSquare(), flat2.getSquare());
-            }
+        for (int i = 0; i < flatsLen - 1; i++) {
+            for (int j = 0; j < flatsLen - i - 1; j++) {
+                double flatsLowPrev = flats[j].getSquare(), flatsHighNext = flats[j + 1].getSquare();
 
-            if (currentOrder == 0) {
-                return Double.compare(flat2.getSquare(), flat1.getSquare());
+                if (currentOrder == 1 && flatsLowPrev > flatsHighNext) {
+                    Flat temp = flats[j];
+                    flats[j] = flats[j + 1];
+                    flats[j + 1] = temp;
+                } else if (currentOrder == 0 && flatsLowPrev < flatsHighNext) {
+                    Flat temp = flats[j];
+                    flats[j] = flats[j + 1];
+                    flats[j + 1] = temp;
+                }
             }
-
-            return 1;
-        });
+        }
 
         return flats;
     }
