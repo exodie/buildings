@@ -1,11 +1,12 @@
-package buildings.dwellingFloor;
+package buildings.impl.dwellingFloor;
 
-import buildings.flat.Flat;
+import buildings.impl.flat.Flat;
+import buildings.interfaces.*;
 
-public class DwellingFloor {
-    private Flat[] flats;
+public class DwellingFloor implements Floor {
+    private Space[] flats;
 
-    public DwellingFloor(Flat[] flats) {
+    public DwellingFloor(Space[] flats) {
         this.flats = flats;
     }
 
@@ -24,7 +25,7 @@ public class DwellingFloor {
     public double getFlatsSquare() {
         double value = 0;
 
-        for (Flat flat : flats) {
+        for (Space flat : flats) {
             value += flat.getSquare();
         }
 
@@ -34,18 +35,18 @@ public class DwellingFloor {
     public int getFlatsQuantity() {
         int value = 0;
 
-        for (Flat flat : flats) {
+        for (Space flat : flats) {
             value += flat.getQuantity();
         }
 
         return value;
     }
 
-    public Flat[] getFlats() {
+    public Space[] getFlats() {
         return flats;
     }
 
-    public Flat getFlat(int idx) {
+    public Space getFlat(int idx) {
         if (idx >= 0 && idx < flats.length) {
             return flats[idx];
         }
@@ -53,15 +54,15 @@ public class DwellingFloor {
         return null;
     }
 
-    public void setFlat(int idx, Flat newFlat) {
+    public void setFlat(int idx, Space newFlat) {
         if (idx >= 0 && idx < flats.length) {
             flats[idx] = newFlat;
         }
     }
 
-    public void addFlat(int idx, Flat newFlat) {
+    public void addFlat(int idx, Space newFlat) {
         if (idx >= 0 && idx <= flats.length) {
-            Flat[] newFlats = new Flat[flats.length + 1];
+            Space[] newFlats = new Flat[flats.length + 1];
 
             for (int i = 0; i < idx; i++) {
                 newFlats[i] = flats[i];
@@ -79,7 +80,7 @@ public class DwellingFloor {
 
     public void deleteFlat(int idx) {
         if (idx >= 0 && idx < flats.length) {
-            Flat[] newFlats = new Flat[flats.length - 1];
+            Space[] newFlats = new Flat[flats.length - 1];
 
             for (int i = 0, j = 0; i < flats.length; i++) {
                 if (i != idx) {
@@ -91,14 +92,14 @@ public class DwellingFloor {
         }
     }
 
-    public Flat getBestSquare() {
+    public Space getBestSquare() {
         if (flats.length == 0) {
             return null;
         }
 
-        Flat best = flats[0];
+        Space best = flats[0];
 
-        for (Flat flat : flats) {
+        for (Space flat : flats) {
             if (flat.getSquare() > best.getSquare()) {
                 best = flat;
             }

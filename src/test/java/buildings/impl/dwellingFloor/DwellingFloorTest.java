@@ -1,5 +1,5 @@
-package buildings.dwellingFloor;
-import buildings.flat.Flat;
+package buildings.impl.dwellingFloor;
+import buildings.impl.flat.Flat;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

@@ -1,61 +1,61 @@
-package buildings.dwellingFloor;
+package buildings.impl.office;
 
-import buildings.flat.Flat;
+import buildings.impl.dwellingFloor.DwellingFloor;
+import buildings.impl.flat.Flat;
+import buildings.interfaces.*;
 
-public class Dwelling {
-    private final DwellingFloor[] floors;
-
-    public Dwelling(DwellingFloor[] floors) {
-        this.floors = floors;
-    }
-
-    public Dwelling(int numOfFloors, int[] numOfApartments) {
-        this(new DwellingFloor[numOfFloors]);
-
-        for (int i = 0; i < numOfFloors; i++) {
-            floors[i] = new DwellingFloor(numOfApartments[i]);
-        }
-    }
-
-    public int getDwellingFloorQuantity() {
-        return floors.length;
-    }
-
+public class OfficeDwelling implements Building {
     public int getFlatsQuantity() {
         int value = 0;
 
-        for (DwellingFloor floor : floors) {
+        for (Floor floor : floors) {
             value += floor.getTotalFlats();
         }
 
         return value;
     }
 
+    private Floor[] floors;
+
+    public OfficeDwelling(int numOfFloors, int[] numOfApartments) {
+        this(new Floor[numOfFloors]);
+
+        for (int i = 0; i < numOfFloors; i++) {
+            floors[i] = new DwellingFloor(numOfApartments[i]);
+        }
+    }
+
+    public OfficeDwelling(Floor[] floors) {
+        this.floors = floors;
+    }
+
+    public int getTotalFlats() {
+        int totalQuantity = 0;
+        for (Floor floor : floors) {
+            totalQuantity += floor.getTotalFlats();
+        }
+        return totalQuantity;
+    }
+
+    public int getFloorQuantity() {
+        return floors.length;
+    }
+
     public double getFlatsSquare() {
         double value = 0;
 
-        for (DwellingFloor floor : floors) {
+        for (Floor floor : floors) {
             value += floor.getFlatsSquare();
         }
 
         return value;
     }
 
-    public int getRoomsQuantity() {
-        int value = 0;
-
-        for (DwellingFloor floor : floors) {
-            value += floor.getFlatsQuantity();
-        }
-
-        return value;
-    }
-
-    public DwellingFloor[] getDwellingFloors() {
+    public Floor[] getFloors() {
         return floors;
     }
 
-    public DwellingFloor getDwellingFloor(int idx) {
+    public Floor getFloor(int idx) {
         if (idx >= 0 && idx < floors.length) {
             return floors[idx];
         }
@@ -63,16 +63,16 @@ public class Dwelling {
         return null;
     }
 
-    public void setDwellingFloor(int idx, DwellingFloor newDwellingFloor) {
+    public void setFloor(int idx, Floor newFloor) {
         if (idx >= 0 && idx < floors.length) {
-            floors[idx] = newDwellingFloor;
+            floors[idx] = newFloor;
         }
     }
 
-    public Flat getFlat(int idx) {
+    public Space getFlat(int idx) {
         int currIdx = idx;
 
-        for (DwellingFloor floor : floors) {
+        for (Floor floor : floors) {
             int numOfFlatsOnFloor = floor.getTotalFlats();
 
             if (currIdx < numOfFlatsOnFloor) {
@@ -88,10 +88,10 @@ public class Dwelling {
     /**
      * FIXME: Duplicate code with addFlat fc
      */
-    public void setFlat(int idx, Flat newFlat) {
+    public void setFlat(int idx, Space newFlat) {
         int currIdx = idx;
 
-        for (DwellingFloor floor : floors) {
+        for (Floor floor : floors) {
             int numOfFlatsOnFloor = floor.getTotalFlats();
 
             if (currIdx < numOfFlatsOnFloor) {
@@ -104,10 +104,10 @@ public class Dwelling {
         }
     }
 
-    public void addFlat(int idx, Flat newFlat) {
+    public void addFlat(int idx, Space newFlat) {
         int currIdx = idx;
 
-        for (DwellingFloor floor : floors) {
+        for (Floor floor : floors) {
             int numOfFlatsOnFloor = floor.getTotalFlats();
 
             if (currIdx <= numOfFlatsOnFloor) {
@@ -123,7 +123,7 @@ public class Dwelling {
     public void deleteFlat(int idx) {
         int currIdx = idx;
 
-        for (DwellingFloor floor : floors) {
+        for (Floor floor : floors) {
             int numOfFlatsOnFloor = floor.getTotalFlats();
 
             if (currIdx < numOfFlatsOnFloor) {
@@ -136,12 +136,12 @@ public class Dwelling {
         }
     }
 
-    public Flat getBestFlatBySquare() {
-        Flat best = null;
+    public Space getBestSpaceBySquare() {
+        Space best = null;
         double maxSquare = 0;
 
-        for (DwellingFloor floor : floors) {
-            Flat bestFloor = floor.getBestSquare();
+        for (Floor floor : floors) {
+            Space bestFloor = floor.getBestSquare();
 
             if (bestFloor != null && bestFloor.getSquare() > maxSquare) {
                 best = bestFloor;
@@ -152,14 +152,14 @@ public class Dwelling {
         return best;
     }
 
-    public Flat[] getSortFlatsBySquare(int currentOrder) {
+    public Space[] getSortSpacesBySquare(int currentOrder) {
         int totalFlats = getFlatsQuantity();
         Flat[] flats = new Flat[totalFlats];
         int flatsLen = flats.length;
 
         int currentIndex = 0;
-        for (DwellingFloor floor : floors) {
-            Flat[] floorFlats = floor.getFlats();
+        for (Floor floor : floors) {
+            Space[] floorFlats = floor.getFlats();
             System.arraycopy(floorFlats, 0, flats, currentIndex, floorFlats.length);
             currentIndex += floorFlats.length;
         }
